@@ -1,5 +1,0 @@
-SELECT 60+count(diavendas) FROM PCDIASUTEIS 
-WHERE DIAVENDAS='S' 
-AND CODFILIAL=6 
-AND DATA BETWEEN TRUNC(SYSDATE, 'MM') -- Primeiro dia do mês atual
-AND TRUNC(SYSDATE) - 1 -- Ontem
