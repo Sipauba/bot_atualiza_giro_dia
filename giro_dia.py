@@ -3,10 +3,10 @@ import time
 import datetime
 import cx_Oracle
 
-host = 'xx'
-servico = 'xx'
-usuario = 'xx'
-senha = 'xx'
+host = 'x'
+servico = 'x'
+usuario = 'x'
+senha = 'x'
 
 # Encontra o arquivo que aponta para o banco de dados
 cx_Oracle.init_oracle_client(lib_dir="./instantclient_21_10")
@@ -18,6 +18,8 @@ conecta_banco = cx_Oracle.connect(usuario, senha, f'{host}/{servico}')
 cursor = conecta_banco.cursor()
 
 dia_atual = datetime.datetime.now()
+
+print('Aplicação iniciada!')
 
 def atualiza_giro():
     
@@ -35,12 +37,14 @@ def atualiza_giro():
     print('Qt. dias uteis: {}'.format(dias_uteis))
     
     print('Atualizando Giro Dia...')
-    sql_giro = 'UPDATE PCEST SET QTGIRODIA=round((QTVENDMES+QTVENDMES1+QTVENDMES2+QTVENDMES3)/{},2) WHERE CODFILIAL IN (3,4,5,6,7,70,14,17,18,19,20,61)'.format(dias_uteis)
+    sql_giro = 'UPDATE PCEST SET QTGIRODIA=round((QTVENDMES+QTVENDMES1+QTVENDMES2+QTVENDMES3)/{},2) WHERE CODFILIAL IN (1,3,4,5,6,7,70,14,17,18,19,20,61)'.format(dias_uteis)
     cursor.execute(sql_giro)
     print('Fazendo COMMIT...')
     cursor.execute('COMMIT')
     print('Giro atualizado! - {} -'.format(dia_atual))
     print('---------------------------------------------------')
+    
+atualiza_giro()
     
 def agendamento():
     
