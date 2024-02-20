@@ -3,10 +3,10 @@ import time
 import datetime
 import cx_Oracle
 
-host = 'x'
-servico = 'x'
-usuario = 'x'
-senha = 'x'
+host = ''
+servico = ''
+usuario = ''
+senha = ''
 
 # Encontra o arquivo que aponta para o banco de dados
 cx_Oracle.init_oracle_client(lib_dir="./instantclient_21_10")
@@ -17,12 +17,10 @@ conecta_banco = cx_Oracle.connect(usuario, senha, f'{host}/{servico}')
 # Cria um cursor no banco para que seja possível fazer consultas e alterações no banco de dados
 cursor = conecta_banco.cursor()
 
-dia_atual = datetime.datetime.now()
-
 print('Aplicação iniciada!')
 
 def atualiza_giro():
-    
+    dia_atual = datetime.datetime.now()
     print('---------------------------------------------------')
     print('Calculando dias uteis...')
     sql_dias_uteis = """
