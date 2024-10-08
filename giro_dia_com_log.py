@@ -24,7 +24,7 @@ print('Aplicação iniciada!')
 
 def atualiza_giro():
     dia_atual_inicio = datetime.datetime.now()
-    print('---------------------------------------------------')
+    print('----------------------------------------------------------------')
     print('Calculando dias úteis... => {}'.format(dia_atual_inicio))
     sql_dias_uteis = """
     SELECT 60+count(diavendas) FROM PCDIASUTEIS 
@@ -38,14 +38,15 @@ def atualiza_giro():
     print('Qt. dias úteis: {}'.format(dias_uteis))
 
     print('Atualizando Giro Dia...')
-    sql_giro = 'UPDATE PCEST SET QTGIRODIA=round((NVL(QTVENDMES,0)+NVL(QTVENDMES1,0)+NVL(QTVENDMES2,0)+NVL(QTVENDMES3,0))/{},2) WHERE CODFILIAL IN (1,3,4,5,6,7,70,14,17,18,19,20,61)'.format(
+    sql_giro = 'UPDATE PCEST SET QTGIRODIA=round((NVL(QTVENDMES,0)+NVL(QTVENDMES1,0)+NVL(QTVENDMES2,0)+NVL(QTVENDMES3,0))/{},2) WHERE CODFILIAL IN (1,11,17,19,20,21,61)'.format(
         dias_uteis)
     cursor.execute(sql_giro)
     print('Fazendo COMMIT...')
     cursor.execute('COMMIT')
     dia_atual_fim = datetime.datetime.now()
-    print('Giro atualizado! - {} -'.format(dia_atual_fim))
-    print('---------------------------------------------------')
+    print('Giro atualizado! => {} '.format(dia_atual_fim))
+    print('Giro aplicado às filiais: 1,11,17,19,20,21,61')
+    print('----------------------------------------------------------------')
     
     # Gera o nome do arquivo de log com a data atual
     nome_arquivo = dia_atual_inicio.strftime("%d-%m-%Y") + ".txt"
@@ -53,26 +54,26 @@ def atualiza_giro():
     
     cursor.execute("""SELECT COUNT (*) 
                     FROM PCEST 
-                    WHERE CODFILIAL IN (1,3,4,5,6,7,70,14,17,18,19,20,61)""")
+                    WHERE CODFILIAL IN (1,11,17,19,20,21,61)""")
     contagem_geral = cursor.fetchone()[0]
     
     cursor.execute("""SELECT COUNT (*)
                     FROM PCEST 
                     WHERE QTGIRODIA = 0
-                    AND CODFILIAL IN (1,3,4,5,6,7,70,14,17,18,19,20,61)""")
+                    AND CODFILIAL IN (1,11,17,19,20,21,61)""")
     contagem_sem_giro = cursor.fetchone()[0]
     
     cursor.execute("""SELECT COUNT (*)
                     FROM PCEST
                     WHERE QTGIRODIA > 0
-                    AND CODFILIAL IN (1,3,4,5,6,7,70,14,17,18,19,20,61)""")
+                    AND CODFILIAL IN (1,11,17,19,20,21,61)""")
     contagem_com_giro = cursor.fetchone()[0]
     
     # Executa o select para obter os dados
     sql_select_geral = cursor.execute("""
     SELECT CODFILIAL, CODPROD, QTEST, DTULTSAIDA, QTVENDMES, QTVENDMES1, QTVENDMES2, QTVENDMES3, QTGIRODIA 
     FROM PCEST 
-    WHERE CODFILIAL IN (1,3,4,5,6,7,70,14,17,18,19,20,61)
+    WHERE CODFILIAL IN (1,11,17,19,20,21,61)
     ORDER BY CODFILIAL""")
 
     # Abre o arquivo de log para escrita
@@ -83,6 +84,7 @@ def atualiza_giro():
         arquivo.write("Itens sem giro: {}\n".format(contagem_sem_giro))
         arquivo.write("Itens com giro: {}\n".format(contagem_com_giro))
         arquivo.write("Data e hora do fim da atualização: {}\n".format(dia_atual_fim))
+        arquivo.write("Giro aplicado às filiais: 1,11,17,19,20,21,61")
         
         """
         # Escreve os cabeçalhos das colunas
